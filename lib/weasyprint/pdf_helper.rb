@@ -31,14 +31,14 @@ class WeasyPrint
     def render_with_weasy(options)
       raise ArgumentError, 'missing keyword: pdf' unless options.is_a?(Hash) && options.key?(:pdf)
 
-      make_and_send_pdf(options.delete(:pdf), (WeasyPrint.config || {}).merge(options))
+      make_and_send_pdf(options.delete(:pdf), options)
     end
 
     def render_to_string_with_weasy(options)
       raise ArgumentError, 'missing keyword: pdf' unless options.is_a?(Hash) && options.key?(:pdf)
 
       options.delete :pdf
-      make_pdf((WeasyPrint.config || {}).merge(options))
+      make_pdf(options)
     end
 
     private
@@ -61,9 +61,9 @@ class WeasyPrint
       render_opts[:locals] = options[:locals] if options[:locals]
       render_opts[:file] = options[:file] if options[:file]
       html_string = render_to_string(render_opts)
-      options = prerender_header_and_footer(options)
-      w = WeasyPrint.new()
-      w.pdf_from_string(html_string, options)
+      #options = prerender_header_and_footer(options)
+      w = WeasyPrint.new(html_string, options)
+      w.to_pdf
     end
 
     def make_and_send_pdf(pdf_name, options = {})
