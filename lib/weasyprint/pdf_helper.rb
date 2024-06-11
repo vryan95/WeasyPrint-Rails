@@ -57,19 +57,18 @@ class WeasyPrint
         :handlers => options[:handlers],
         :assigns => options[:assigns]
       }
-      render_opts[:inline] = options[:inline] if options[:inline]
       render_opts[:locals] = options[:locals] if options[:locals]
       render_opts[:file] = options[:file] if options[:file]
       html_string = render_to_string(render_opts)
       #options = prerender_header_and_footer(options)
-      w = WeasyPrint.new(html_string, options)
+      w = WeasyPrint.new(html_string.gsub('"', '\"'), {})
       w.to_pdf
     end
 
     def make_and_send_pdf(pdf_name, options = {})
       options[:layout] ||= false
       options[:template] || File.join(controller_path, action_name)
-      options[:disposition] ||= 'inline'
+      options[:disposition] ||= "attachment"
       if options[:show_as_html]
         render_opts = {
           :template => options[:template],
@@ -79,7 +78,6 @@ class WeasyPrint
           :assigns => options[:assigns],
           :content_type => 'text/html'
         }
-        render_opts[:inline] = options[:inline] if options[:inline]
         render_opts[:locals] = options[:locals] if options[:locals]
         render_opts[:file] = options[:file] if options[:file]
         render(render_opts)

@@ -45,7 +45,7 @@ class WeasyPrint
     result = IO.popen(invoke, "wb+") do |pdf|
       pdf.puts(@source.to_s) if @source.html?
       pdf.close_write
-      pdf.gets
+      pdf.read
     end
     result = File.read(path) if path
 
