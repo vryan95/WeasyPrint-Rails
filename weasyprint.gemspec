@@ -5,7 +5,8 @@ Gem::Specification.new do |s|
   s.description = "Use this gem to create PDF files using weasyprint"
   s.authors = ["Ryan Verschuren"]
   s.email = "rv@aucxis.com"
-  s.files = ["lib/weasyprint.rb", "lib/weasyprint/configuration.rb", "lib/weasyprint/pdf_helper.rb", "lib/weasyprint/railtie.rb", "lib/weasyprint/source.rb"]
+  s.files = ["lib/weasyprint.rb", "lib/weasyprint/configuration.rb", "lib/weasyprint/pdf_helper.rb", 
+      "lib/weasyprint/railtie.rb", "lib/weasyprint/source.rb", "lib/weasyprint/weasy_helper.rb", "lib/weasyprint/weasy_helper/assets.rb"]
   s.homepage = ""
   s.license = ""
 end

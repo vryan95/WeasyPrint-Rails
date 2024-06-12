@@ -1,18 +1,23 @@
 class WeasyPrint
   class Configuration
     attr_accessor :meta_tag_prefix, :default_options, :root_url
-    attr_writer :weasyprint, :verbose
+    attr_writer :weasyprint, :verbose, :raise_on_missing_assets
 
     def initialize
       @verbose         = false
       @meta_tag_prefix = 'weasyprint-'
       @default_options = {
-        encoding: 'UTF-8'
+        encoding: 'UTF-8',
+        debug: true
       }
     end
 
     def weasyprint
       @weasyprint ||= (defined?(Bundler::GemfileError) ? `bundle exec which weasyprint` : `which weasyprint`).chomp
+    end
+
+    def raise_on_missing_assets
+      @raise_on_missing_assets ||= false
     end
 
     def quiet?
