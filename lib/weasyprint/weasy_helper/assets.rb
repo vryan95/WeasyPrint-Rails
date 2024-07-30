@@ -14,6 +14,50 @@ class WeasyPrint
         end
       end
 
+      class MissingRemoteAsset < MissingAsset
+        attr_reader :url, :response
+
+        def initialize(url, response)
+          @url = url
+          @response = response
+          super("Could not fetch asset '#{url}': server responded with #{response.code} #{response.message}")
+        end
+      end
+
+      class PropshaftAsset < SimpleDelegator
+        def content_type
+          super.to_s
+        end
+
+        def to_s
+          content
+        end
+
+        def filename
+          path.to_s
+        end
+      end
+
+      class LocalAsset
+        attr_reader :path
+
+        def initialize(path)
+          @path = path
+        end
+
+        def content_type
+          Mime::Type.lookup_by_extension(File.extname(path).delete('.'))
+        end
+
+        def to_s
+          IO.read(path)
+        end
+
+        def filename
+          path.to_s
+        end
+      end
+
       def weasy_stylesheet_link_tag(*sources)
         stylesheet_contents = sources.collect do |source|
           source = WeasyHelper.add_extension(source, 'css')
@@ -105,6 +149,19 @@ class WeasyPrint
         elsif WeasyPrint.configuration[:raise_on_missing_assets]
           raise MissingLocalAsset, pathname if WeasyPrint.configuration.raise_on_missing_assets
         end
+      end
+
+      def read_from_uri(uri)
+        response = Net::HTTP.get_response(URI(uri))
+
+        unless response.is_a?(Net::HTTPSuccess)
+          raise MissingRemoteAsset.new(uri, response) if WeasyPrint.configuration.raise_on_missing_assets
+          return
+        end
+
+        asset = response.body
+        asset.force_encoding('UTF-8') if asset
+        asset
       end
 
       # will prepend a http or default_protocol to a protocol relative URL
