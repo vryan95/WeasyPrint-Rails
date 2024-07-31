@@ -1,7 +1,7 @@
 class WeasyPrint
   class Configuration
     attr_accessor :meta_tag_prefix, :default_options, :root_url
-    attr_writer :weasyprint, :verbose, :raise_on_missing_assets
+    attr_writer :weasyprint, :verbose, :raise_on_missing_assets, :default_protocol
 
     def initialize
       @verbose         = false
