@@ -68,7 +68,7 @@ class WeasyPrint
           if Regexp.last_match[1].starts_with?('data:')
             "url(#{Regexp.last_match[1]})"
           else
-            "url(#{weasy_pdf_asset_path(Regexp.last_match[1])})"
+            "url(#{weasy_asset_path(Regexp.last_match[1])})"
           end
         end.html_safe
       end
