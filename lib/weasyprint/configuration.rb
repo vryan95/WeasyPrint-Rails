@@ -10,6 +10,7 @@ class WeasyPrint
         encoding: 'UTF-8',
         debug: true
       }
+      @default_protocol = 'http'
     end
 
     def weasyprint
@@ -26,6 +27,10 @@ class WeasyPrint
 
     def verbose?
       @verbose
+    end
+
+    def default_protocol
+      @default_protocol
     end
   end
 
